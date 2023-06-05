@@ -14,8 +14,9 @@ const Acceuil = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://plain-teal-bull.cyclic.app/professeurs"
+        "https://troubled-red-garb.cyclic.app/professeurs"
       );
+      // ///////////////////////
       const professors = response.data;
 
       // Count the number of professors per specialty

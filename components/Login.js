@@ -14,7 +14,7 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState("");
   const [showModal, setShowModal] = useState(false);
   const handleLogin = () => {
-    fetch("https://plain-teal-bull.cyclic.app/login", {
+    fetch("https://troubled-red-garb.cyclic.app/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +24,7 @@ export default function Login({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.message === "Authentication successful") {
-          fetch("https://plain-teal-bull.cyclic.app/professeurs")
+          fetch("https://troubled-red-garb.cyclic.app/professeurs")
             .then((response) => response.json())
             .then((professeursData) => {
               const professor = professeursData.find(
@@ -91,7 +91,7 @@ export default function Login({ navigation }) {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalText}>Incorrect information</Text>
+            <Text style={styles.modalText}>Wrong information</Text>
             <TouchableOpacity
               onPress={() => setShowModal(false)}
               style={styles.modalButton}

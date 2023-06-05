@@ -42,14 +42,55 @@ export default function Profil({ navigation }) {
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `https://plain-teal-bull.cyclic.app/professeurs/${email}`
+        `https://troubled-red-garb.cyclic.app/professeurs/${email}`
       );
       console.log("Professor deleted");
-      navigation.navigate("Acceuil");
+      navigation.navigate("DrawerSkip");
     } catch (error) {
       console.error("Error deleting professor:", error);
     }
   };
+  const handleUpdate = async () => {
+    if (true) {
+      try {
+        const response = await axios.post(
+          "https://troubled-red-garb.cyclic.app/professeurs",
+          {
+            nom: nom,
+            prenom: prenom,
+            tel: tel,
+            email: email,
+            grade: grade,
+            specialite: specialite,
+            faculteActuelle: faculteActuelle,
+            villeFaculteActuelle: villeFaculteActuelle,
+            villeDesiree: villeDesiree,
+          }
+        );
+        setNom(nom);
+        setPrenom(prenom);
+        setTel(tel);
+        setGrade(grade);
+        setSpecialite(specialite);
+        setFaculteActuelle(faculteActuelle);
+        setVilleFaculteActuelle(villeFaculteActuelle);
+        setVilleDesiree(villeDesiree);
+        if (response.status === 200) {
+          setShowSuccessModal(true);
+        } else {
+          console.error("Failed to update professor");
+        }
+      } catch (error) {
+        console.error("Error updating professor:", error);
+        Alert.alert("Error", "An error occurred while updating the profile.", [
+          {
+            text: "OK",
+          },
+        ]);
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.scrollView}>
@@ -59,6 +100,7 @@ export default function Profil({ navigation }) {
             value={email}
             onChangeText={setEmail}
             style={styles.input}
+            editable={false}
           />
           <TextInput
             placeholder="Nom"
@@ -108,9 +150,14 @@ export default function Profil({ navigation }) {
             onChangeText={setVilleDesiree}
             style={styles.input}
           />
-          <TouchableOpacity onPress={handleDelete} style={styles.button}>
-            <Text style={styles.buttonText}>Delete</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={handleDelete} style={styles.button}>
+              <Text style={styles.buttonText}>Delete</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleUpdate} style={styles.button2}>
+              <Text style={styles.buttonText}>Update</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
         <Modal
           visible={showSuccessModal}
@@ -120,7 +167,9 @@ export default function Profil({ navigation }) {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalText}>Informations mises à jour</Text>
+              <Text style={styles.modalText}>
+                Informations was updated Successfully
+              </Text>
               <TouchableOpacity
                 onPress={() => setShowSuccessModal(false)}
                 style={styles.modalButton}
@@ -135,6 +184,12 @@ export default function Profil({ navigation }) {
   );
 }
 const styles = StyleSheet.create({
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
+    marginTop: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -170,6 +225,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginTop: 10,
   },
+  button2: {
+    backgroundColor: "green",
+    borderRadius: 25,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    marginTop: 10,
+  },
   buttonText: {
     color: "#fff",
     fontSize: 16,
@@ -193,7 +255,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   modalButton: {
-    backgroundColor: "red",
+    backgroundColor: "#446688",
     borderRadius: 25,
     paddingVertical: 12,
     paddingHorizontal: 20,

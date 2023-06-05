@@ -38,7 +38,7 @@ export default function Register({ navigation }) {
     }
     try {
       const response = await fetch(
-        "https://plain-teal-bull.cyclic.app/professeurs",
+        "https://troubled-red-garb.cyclic.app/professeurs",
         {
           method: "POST",
           headers: {
@@ -61,7 +61,18 @@ export default function Register({ navigation }) {
       if (response.ok) {
         const data = await response.json();
         console.log("Professor added successfully:", data);
-        navigation.navigate("Login");
+        const professor = {
+          nom: nom,
+          prenom: prenom,
+          tel: tel,
+          email: email,
+          grade: grade,
+          specialite: specialite,
+          faculteActuelle: faculteActuelle,
+          villeFaculteActuelle: villeFaculteActuelle,
+          villeDesiree: villeDesiree,
+        };
+        navigation.navigate("Drawer", { professor });
       } else {
         const error = await response.json();
         console.error("Failed to add professor:", error.message);
