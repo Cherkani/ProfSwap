@@ -4,12 +4,12 @@ import { PieChart } from "react-native-chart-kit";
 import axios from "axios";
 
 const Acceuil = () => {
+  const [professorTableData, setProfessorTableData] = useState([]);
   const [specialtyData, setSpecialtyData] = useState([]);
   const [cityData, setCityData] = useState([]);
   const [gradeData, setGradeData] = useState([]);
   const [specialtyTableData, setSpecialtyTableData] = useState([]);
   const [cityTableData, setCityTableData] = useState([]);
-  const [professorTableData, setProfessorTableData] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -160,7 +160,7 @@ const Acceuil = () => {
       <View style={styles.container}>
         <View style={styles.chartTitleContainer}>
           <Text style={styles.chartTitle}>
-            Nombre de profs inscrits:{" "}
+            Number of Registred Teacher :{" "}
             {specialtyData.reduce(
               (total, specialty) => total + specialty.population,
               0
@@ -169,7 +169,7 @@ const Acceuil = () => {
         </View>
 
         <View style={styles.chartTitleContainer}>
-          <Text style={styles.chartTitle}>Nombre de profs par spécialité</Text>
+          <Text style={styles.chartTitle}>Number of teachers by specialty</Text>
         </View>
         <View style={styles.chartTitleContainer}>
           <PieChart
@@ -189,7 +189,7 @@ const Acceuil = () => {
 
       <View style={styles.container}>
         <View style={styles.chartTitleContainer}>
-          <Text style={styles.chartTitle}>Villes les plus demandées</Text>
+          <Text style={styles.chartTitle}>Most in-demand cities</Text>
         </View>
         <View style={styles.chartTitleContainer}>
           <PieChart
@@ -209,7 +209,7 @@ const Acceuil = () => {
 
       <View style={styles.container}>
         <View style={styles.chartTitleContainer}>
-          <Text style={styles.chartTitle}>Nombre de profs par grade</Text>
+          <Text style={styles.chartTitle}>Number of teachers by Grade</Text>
         </View>
 
         <View style={styles.chartTitleContainer}>
@@ -232,7 +232,7 @@ const Acceuil = () => {
 
       <View style={styles.containerTable}>
         <Text style={styles.chartTitle}>
-          Nombre de profs par spécialité (Top 15)
+          Number of teachers by specialty (Top 15)
         </Text>
         <View>
           <View style={styles.tableRow}>
@@ -252,13 +252,11 @@ const Acceuil = () => {
       </View>
 
       <View style={styles.containerTable}>
-        <Text style={styles.chartTitle}>
-          Villes les plus demandées (Top 15)
-        </Text>
+        <Text style={styles.chartTitle}>Most in-demand cities(Top 15)</Text>
         <View>
           <View style={styles.tableRow}>
-            <Text style={styles.tableHeader}>Spécialité</Text>
-            <Text style={styles.tableHeader}>Nombre</Text>
+            <Text style={styles.tableHeader}>Spéciality</Text>
+            <Text style={styles.tableHeader}>Number</Text>
           </View>
           {cityTableData
             .sort((a, b) => b.count - a.count) // Tri par ordre décroissant
@@ -272,7 +270,7 @@ const Acceuil = () => {
         </View>
       </View>
       <View style={styles.containerTable}>
-        <Text style={styles.chartTitle}>Nombre de profs par grade</Text>
+        <Text style={styles.chartTitle}>Number of teachers by Grade</Text>
         <View>
           <View style={styles.tableRow}>
             <Text style={styles.tableHeader}>Grade</Text>

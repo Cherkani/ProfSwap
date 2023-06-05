@@ -86,31 +86,31 @@ export default function Register({ navigation }) {
       <View style={styles.scrollView}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <TextInput
-            placeholder="Nom"
+            placeholder="Name"
             value={nom}
             onChangeText={setNom}
             style={styles.input}
           />
           <TextInput
-            placeholder="Prénom"
+            placeholder="FirstName"
             value={prenom}
             onChangeText={setPrenom}
             style={styles.input}
           />
           <TextInput
-            placeholder="Téléphone"
+            placeholder="Phone"
             value={tel}
             onChangeText={setTel}
             style={styles.input}
           />
           <TextInput
-            placeholder="Email d'utilisateur"
+            placeholder="Email"
             value={email}
             onChangeText={setEmail}
             style={styles.input}
           />
           <TextInput
-            placeholder="Mot de passe"
+            placeholder="Password"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
@@ -124,25 +124,25 @@ export default function Register({ navigation }) {
             style={styles.input}
           />
           <TextInput
-            placeholder="Spécialité"
+            placeholder="Spéciality"
             value={specialite}
             onChangeText={setSpecialite}
             style={styles.input}
           />
           <TextInput
-            placeholder="Faculté actuelle"
+            placeholder="Actual Faculty"
             value={faculteActuelle}
             onChangeText={setFaculteActuelle}
             style={styles.input}
           />
           <TextInput
-            placeholder="Ville de la faculté actuelle"
+            placeholder="Actual City"
             value={villeFaculteActuelle}
             onChangeText={setVilleFaculteActuelle}
             style={styles.input}
           />
           <TextInput
-            placeholder="Ville désirée"
+            placeholder="Desired City"
             value={villeDesiree}
             onChangeText={setVilleDesiree}
             style={styles.input}

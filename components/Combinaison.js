@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
-
-import { Dropdown } from "react-native-element-dropdown";
 const Combinaison = () => {
   const [Professeurs, setProfesseurs] = useState([]);
   const [Spécialités, setSpécialités] = useState("");
@@ -35,22 +33,21 @@ const Combinaison = () => {
         professor.nom !== item.nom &&
         Professeurs.indexOf(professor) > Professeurs.indexOf(item)
     );
+    //si pas prof sauter
     if (correspondingProfesseurs.length === 0) {
-      // If there are no corresponding professors, skip rendering this item
       return null;
     }
+    //
     return (
       <View style={styles.itemContainer}>
         <View style={styles.column}>
           <Text style={styles.professorName}>
-            {item.nom} ({item.villeFaculteActuelle} - {item.villeDesiree})
+            {item.nom} ({item.villeFaculteActuelle})({item.grade}) -&gt;
           </Text>
-        </View>
-        <View style={styles.column}>
           {correspondingProfesseurs.map((professor) => (
             <Text style={styles.correspondingProfessorName} key={professor._id}>
-              {professor.nom} ({professor.villeFaculteActuelle} -{" "}
-              {professor.villeDesiree})
+              {professor.nom} ( {professor.villeDesiree.replace(/;/g, " | ")})(
+              {item.grade})
             </Text>
           ))}
         </View>

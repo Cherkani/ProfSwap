@@ -11,28 +11,29 @@ import {
 import axios from "axios";
 import { useRoute } from "@react-navigation/native";
 export default function Profil({ navigation }) {
-  const [email, setEmail] = useState("");
+  const route = useRoute();
+  const { professor } = route.params || { professor: null };
+  const [modalSucces, setmodalSucces] = useState(false);
   const [password, setPassword] = useState("");
-  const [nom, setNom] = useState("");
+  const [email, setEmail] = useState("");
   const [prenom, setPrenom] = useState("");
+  const [nom, setNom] = useState("");
   const [tel, setTel] = useState("");
   const [grade, setGrade] = useState("");
   const [specialite, setSpecialite] = useState("");
-  const [faculteActuelle, setFaculteActuelle] = useState("");
   const [villeFaculteActuelle, setVilleFaculteActuelle] = useState("");
+  const [faculteActuelle, setFaculteActuelle] = useState("");
   const [villeDesiree, setVilleDesiree] = useState("");
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const route = useRoute();
-  const { professor } = route.params || { professor: null };
+
   useEffect(() => {
     if (route.params?.professor) {
       const { professor } = route.params;
-      setEmail(professor.email);
-      setPassword(professor.password);
-      setNom(professor.nom);
       setPrenom(professor.prenom);
+      setNom(professor.nom);
       setTel(professor.tel);
       setGrade(professor.grade);
+      setEmail(professor.email);
+      setPassword(professor.password);
       setSpecialite(professor.specialite);
       setFaculteActuelle(professor.faculteActuelle);
       setVilleFaculteActuelle(professor.villeFaculteActuelle);
@@ -76,7 +77,7 @@ export default function Profil({ navigation }) {
         setVilleFaculteActuelle(villeFaculteActuelle);
         setVilleDesiree(villeDesiree);
         if (response.status === 200) {
-          setShowSuccessModal(true);
+          setmodalSucces(true);
         } else {
           console.error("Failed to update professor");
         }
@@ -96,26 +97,26 @@ export default function Profil({ navigation }) {
       <View style={styles.scrollView}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <TextInput
-            placeholder="Email d'utilisateur"
+            placeholder="Email"
             value={email}
             onChangeText={setEmail}
             style={styles.input}
             editable={false}
           />
           <TextInput
-            placeholder="Nom"
+            placeholder="Name"
             value={nom}
             onChangeText={setNom}
             style={styles.input}
           />
           <TextInput
-            placeholder="Prénom"
+            placeholder="SirName"
             value={prenom}
             onChangeText={setPrenom}
             style={styles.input}
           />
           <TextInput
-            placeholder="Téléphone"
+            placeholder="Phone"
             value={tel}
             onChangeText={setTel}
             style={styles.input}
@@ -127,25 +128,25 @@ export default function Profil({ navigation }) {
             style={styles.input}
           />
           <TextInput
-            placeholder="Spécialité"
+            placeholder="Speciality"
             value={specialite}
             onChangeText={setSpecialite}
             style={styles.input}
           />
           <TextInput
-            placeholder="Faculté actuelle"
+            placeholder="Actual Faculty"
             value={faculteActuelle}
             onChangeText={setFaculteActuelle}
             style={styles.input}
           />
           <TextInput
-            placeholder="Ville de la faculté actuelle"
+            placeholder="Actual City"
             value={villeFaculteActuelle}
             onChangeText={setVilleFaculteActuelle}
             style={styles.input}
           />
           <TextInput
-            placeholder="Ville désirée"
+            placeholder="Desired City"
             value={villeDesiree}
             onChangeText={setVilleDesiree}
             style={styles.input}
@@ -160,10 +161,10 @@ export default function Profil({ navigation }) {
           </View>
         </ScrollView>
         <Modal
-          visible={showSuccessModal}
+          visible={modalSucces}
           animationType="slide"
           transparent={true}
-          onRequestClose={() => setShowSuccessModal(false)}
+          onRequestClose={() => setmodalSucces(false)}
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
@@ -171,7 +172,7 @@ export default function Profil({ navigation }) {
                 Informations was updated Successfully
               </Text>
               <TouchableOpacity
-                onPress={() => setShowSuccessModal(false)}
+                onPress={() => setmodalSucces(false)}
                 style={styles.modalButton}
               >
                 <Text style={styles.modalButtonText}>OK</Text>

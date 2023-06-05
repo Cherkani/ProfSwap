@@ -126,8 +126,8 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   buttonContainer: {
-    flexDirection: "row", // Afficher les boutons côte à côte
-    justifyContent: "space-between", // Espace égal entre les boutons
+    flexDirection: "row",
+    justifyContent: "space-between",
     width: "80%",
     marginTop: 10,
   },
