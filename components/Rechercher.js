@@ -9,176 +9,170 @@ import {
   Modal,
   SafeAreaView,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
-// import { RoundedPicker } from "react-native-rounded-picker";
-
 import { Card } from "react-native-shadow-cards";
-const Recherche = () => {
-  const [specialitésFilter, setspecialitésFilter] = useState("");
-  const [villeActuelleFilter, setvilleActuelleFilter] = useState("");
-  const [wantedCityFilter, setWantedCityFilter] = useState("");
+import ModalSelector from "react-native-modal-selector";
 
-  const [professeurss, setprofesseurss] = useState([]);
-  const [professeurSelectionne, setprofesseurSelectionne] = useState(null);
+const Recherche = () => {
+  const [selectedSpeciality, setSelectedSpeciality] =
+    useState("All Specialities");
+  const [selectedCityActual, setSelectedCityActual] = useState("All Cities");
+  const [selectedCityDesired, setSelectedCityDesired] = useState("All Cities");
+
+  const [specialitiesFilter, setSpecialitiesFilter] = useState("");
+  const [cityActualFilter, setCityActualFilter] = useState("");
+  const [cityDesiredFilter, setCityDesiredFilter] = useState("");
+
+  const [professeurs, setProfesseurs] = useState([]);
+  const [selectedProfesseur, setSelectedProfesseur] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const Links = "https://troubled-red-garb.cyclic.app/professeurs";
+  const links = "https://troubled-red-garb.cyclic.app/professeurs";
 
   useEffect(() => {
     axios
-      .get(Links)
+      .get(links)
       .then((response) => {
-        setprofesseurss(response.data);
+        setProfesseurs(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
 
-  const getvilleActuelleOptions = () => {
+  const getActualCityOptions = () => {
     const uniqueCities = [
       ...new Set(
-        professeurss.map((professeurs) => professeurs.villeFaculteActuelle)
+        professeurs.map((professeur) => professeur.villeFaculteActuelle)
       ),
     ];
-    return ["", ...uniqueCities];
+    return [
+      { key: "", label: selectedCityActual },
+      ...uniqueCities.map((city) => ({ key: city, label: city })),
+    ];
   };
 
-  const getWantedCityOptions = () => {
+  const getDesiredCityOptions = () => {
     const uniqueCities = [
       ...new Set(
-        professeurss
-          .map((professeurs) =>
-            professeurs.villeDesiree.split(";").map((city) => city.trim())
+        professeurs
+          .map((professeur) =>
+            professeur.villeDesiree.split(";").map((city) => city.trim())
           )
           .flat()
       ),
     ];
-    return ["", ...uniqueCities];
-  };
-
-  const getspecialitésOptions = () => {
-    const uniqueSpecialties = [
-      ...new Set(professeurss.map((professeurs) => professeurs.specialite)),
+    return [
+      { key: "", label: selectedCityDesired },
+      ...uniqueCities.map((city) => ({ key: city, label: city })),
     ];
-    return ["", ...uniqueSpecialties];
   };
 
-  const filterprofesseurss = () => {
-    return professeurss.filter((professeurs) => {
-      const villeActuelleMatch =
-        villeActuelleFilter === "" ||
-        professeurs.villeFaculteActuelle
-          .toLowerCase()
-          .includes(villeActuelleFilter.toLowerCase());
-      const wantedCityMatch =
-        wantedCityFilter === "" ||
-        professeurs.villeDesiree
-          .toLowerCase()
-          .includes(wantedCityFilter.toLowerCase());
-      const specialitésMatch =
-        specialitésFilter === "" ||
-        professeurs.specialite
-          .toLowerCase()
-          .includes(specialitésFilter.toLowerCase());
+  const getSpecialitiesOptions = () => {
+    const uniqueSpecialities = [
+      ...new Set(professeurs.map((professeur) => professeur.specialite)),
+    ];
+    return [
+      { key: "", label: selectedSpeciality },
+      ...uniqueSpecialities.map((specialite) => ({
+        key: specialite,
+        label: specialite,
+      })),
+    ];
+  };
 
-      return villeActuelleMatch && wantedCityMatch && specialitésMatch;
+  const filterProfesseurs = () => {
+    return professeurs.filter((professeur) => {
+      const actualCityMatch =
+        cityActualFilter === "" ||
+        professeur.villeFaculteActuelle
+          .toLowerCase()
+          .includes(cityActualFilter.toLowerCase());
+      const desiredCityMatch =
+        cityDesiredFilter === "" ||
+        professeur.villeDesiree
+          .toLowerCase()
+          .includes(cityDesiredFilter.toLowerCase());
+      const specialitiesMatch =
+        specialitiesFilter === "" ||
+        professeur.specialite
+          .toLowerCase()
+          .includes(specialitiesFilter.toLowerCase());
+      return actualCityMatch && desiredCityMatch && specialitiesMatch;
     });
   };
 
-  const handleprofesseursPress = (professeurs) => {
-    setprofesseurSelectionne(professeurs);
+  const handleProfesseurPress = (professeur) => {
+    setSelectedProfesseur(professeur);
     setModalVisible(true);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.dropdowncontainer}>
+      <View style={styles.dropdownContainer}>
         <Text style={styles.dropdownText}>Specialities</Text>
-
-        <Picker
+        <ModalSelector
           style={styles.dropdown}
-          selectedValue={specialitésFilter}
-          onValueChange={(itemValue) => setspecialitésFilter(itemValue)}
-        >
-          {getspecialitésOptions().map((specialités) => (
-            <Picker.Item
-              key={specialités}
-              label={specialités === "" ? "All  specialities" : specialités}
-              value={specialités}
-            />
-          ))}
-        </Picker>
+          data={getSpecialitiesOptions()}
+          initValue={selectedSpeciality}
+          onChange={(option) => {
+            setSpecialitiesFilter(option.key);
+            setSelectedSpeciality(option.key);
+          }}
+        />
       </View>
 
-      <View style={styles.dropdowncontainer}>
+      <View style={styles.dropdownContainer}>
         <Text style={styles.dropdownText}>Actual Cities</Text>
-        <Picker
+        <ModalSelector
           style={styles.dropdown}
-          selectedValue={villeActuelleFilter}
-          onValueChange={(itemValue) => setvilleActuelleFilter(itemValue)}
-        >
-          {getvilleActuelleOptions().map((city) => (
-            <Picker.Item
-              key={city}
-              label={city === "" ? "All Cities" : city}
-              value={city}
-            />
-          ))}
-        </Picker>
+          data={getActualCityOptions()}
+          initValue={selectedCityActual}
+          onChange={(option) => {
+            setCityActualFilter(option.key);
+            setSelectedCityActual(option.key);
+          }}
+        />
       </View>
-      <View style={styles.dropdowncontainer}>
-        <Text style={styles.dropdownText}>Wanted Cities</Text>
-        <Picker
+
+      <View style={styles.dropdownContainer}>
+        <Text style={styles.dropdownText}>Desired Cities</Text>
+        <ModalSelector
           style={styles.dropdown}
-          selectedValue={wantedCityFilter}
-          onValueChange={(itemValue) => setWantedCityFilter(itemValue)}
-        >
-          {getWantedCityOptions().map((city) => (
-            <Picker.Item
-              key={city}
-              label={city === "" ? "All cities" : city}
-              value={city}
-            />
-          ))}
-        </Picker>
+          data={getDesiredCityOptions()}
+          initValue={selectedCityDesired}
+          onChange={(option) => {
+            setCityDesiredFilter(option.key);
+            setSelectedCityDesired(option.key);
+          }}
+        />
       </View>
 
       <FlatList
-        data={filterprofesseurss()}
+        data={filterProfesseurs()}
         renderItem={({ item }) => (
           <Card style={{ padding: 10, marginTop: 10, marginLeft: 15 }}>
-            {/* <View style={styles.fleche}> */}
             <Text style={styles.textContainer}>
-              <Text style={styles.boldtext}>
+              <Text style={styles.boldText}>
                 {item.nom} {item.prenom}
               </Text>
-              {"\n"}
-              {"\n"}
+              {"\n\n"}
               <Text>
-                &lt;----{"\t"}
-                {"\t"}
-                {"\t"}
+                &lt;----{"\t\t\t\t"}
                 {item.villeFaculteActuelle}
               </Text>
-              {"\n"}
-
-              {"\n"}
+              {"\n\n"}
               <Text>
-                ----&gt;{"\t"}
-                {"\t"}
-                {"\t"}
+                ----&gt;{"\t\t\t\t"}
                 {item.villeDesiree.replace(/;/g, " | ")}
               </Text>
             </Text>
 
-            {/* </View> */}
             <TouchableOpacity
               style={styles.modalCloseButton}
-              onPress={() => handleprofesseursPress(item)}
+              onPress={() => handleProfesseurPress(item)}
             >
-              <Text style={styles.textbold}>View Details</Text>
+              <Text style={styles.textBold}>View Details</Text>
             </TouchableOpacity>
           </Card>
         )}
@@ -192,73 +186,50 @@ const Recherche = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <View style={styles.tableRow}>
-              <Text style={styles.tableCell}> Email </Text>
-              <Text style={styles.tableCell}>
-                {" "}
-                {professeurSelectionne?.email}
-              </Text>
+              <Text style={styles.tableCell}>Email</Text>
+              <Text style={styles.tableCell}>{selectedProfesseur?.email}</Text>
             </View>
 
             <View style={styles.tableRow}>
-              <Text style={styles.tableCell}> Firstname </Text>
-              <Text style={styles.tableCell}>
-                {" "}
-                {professeurSelectionne?.prenom}
-              </Text>
+              <Text style={styles.tableCell}>Firstname</Text>
+              <Text style={styles.tableCell}>{selectedProfesseur?.prenom}</Text>
             </View>
 
             <View style={styles.tableRow}>
-              <Text style={styles.tableCell}> Name </Text>
-              <Text style={styles.tableCell}>
-                {" "}
-                {professeurSelectionne?.nom}
-              </Text>
+              <Text style={styles.tableCell}>Name</Text>
+              <Text style={styles.tableCell}>{selectedProfesseur?.nom}</Text>
             </View>
 
             <View style={styles.tableRow}>
-              <Text style={styles.tableCell}> Phone</Text>
+              <Text style={styles.tableCell}>Phone</Text>
+              <Text style={styles.tableCell}>{selectedProfesseur?.tel}</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.tableCell}>Speciality</Text>
               <Text style={styles.tableCell}>
-                {" "}
-                {professeurSelectionne?.tel}
+                {selectedProfesseur?.specialite}
               </Text>
             </View>
             <View style={styles.tableRow}>
-              <Text style={styles.tableCell}> Speciality </Text>
+              <Text style={styles.tableCell}>Faculty</Text>
               <Text style={styles.tableCell}>
-                {" "}
-                {professeurSelectionne?.specialite}
+                {selectedProfesseur?.faculteActuelle}
               </Text>
             </View>
             <View style={styles.tableRow}>
-              <Text style={styles.tableCell}> Faculty </Text>
+              <Text style={styles.tableCell}>Grade</Text>
+              <Text style={styles.tableCell}>{selectedProfesseur?.grade}</Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.tableCell}>Actual City</Text>
               <Text style={styles.tableCell}>
-                {" "}
-                {professeurSelectionne?.faculteActuelle}
+                {selectedProfesseur?.villeFaculteActuelle.replace(/;/g, " | ")}
               </Text>
             </View>
             <View style={styles.tableRow}>
-              <Text style={styles.tableCell}> Grade</Text>
+              <Text style={styles.tableCell}>Desired City</Text>
               <Text style={styles.tableCell}>
-                {" "}
-                {professeurSelectionne?.grade}
-              </Text>
-            </View>
-            <View style={styles.tableRow}>
-              <Text style={styles.tableCell}> Actual City</Text>
-
-              <Text style={styles.tableCell}>
-                {" "}
-                {professeurSelectionne?.villeFaculteActuelle.replace(
-                  /;/g,
-                  " | "
-                )}
-              </Text>
-            </View>
-            <View style={styles.tableRow}>
-              <Text style={styles.tableCell}> Desired City</Text>
-              <Text style={styles.tableCell}>
-                {" "}
-                {professeurSelectionne?.villeDesiree.replace(/;/g, " | ")}
+                {selectedProfesseur?.villeDesiree.replace(/;/g, " | ")}
               </Text>
             </View>
             {/* Add more details as needed */}
@@ -266,7 +237,7 @@ const Recherche = () => {
               style={styles.modalCloseButton}
               onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.textbold}>Close</Text>
+              <Text style={styles.textBold}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -276,8 +247,9 @@ const Recherche = () => {
     </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
-  boldtext: {
+  boldText: {
     fontWeight: "bold",
     fontSize: 18,
   },
@@ -286,7 +258,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginLeft: 15,
   },
-  dropdowncontainer: {
+  dropdownContainer: {
     marginLeft: 20,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -315,10 +287,8 @@ const styles = StyleSheet.create({
     height: 40,
     width: 200,
     marginBottom: 5,
-    backgroundColor: "lightblue",
-    borderWidth: 1,
-    borderColor: "gray",
-    borderRadius: 20, // Modifier cette valeur pour ajuster le rayon des coins
+    backgroundColor: "#446688",
+    borderRadius: 20,
     overflow: "hidden",
   },
 
@@ -345,7 +315,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#446688",
     borderRadius: 25,
   },
-  textbold: {
+  textBold: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#fff",

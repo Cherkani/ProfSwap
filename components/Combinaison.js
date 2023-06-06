@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, FlatList } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import ModalSelector from "react-native-modal-selector";
 import axios from "axios";
+import { TouchableOpacity } from "react-native";
 
 import { Card } from "react-native-shadow-cards";
+
 const Combinaison = () => {
   const [Professeurs, setProfesseurs] = useState([]);
   const [Spécialités, setSpécialités] = useState("");
+  const [selectedSpeciality, setSelectedSpeciality] = useState(
+    "Select a speciality"
+  );
   const Link = "https://troubled-red-garb.cyclic.app/professeurs";
 
   useEffect(() => {
@@ -35,11 +40,11 @@ const Combinaison = () => {
         professor.nom !== item.nom &&
         Professeurs.indexOf(professor) > Professeurs.indexOf(item)
     );
-    //si pas prof sauter
+
     if (correspondingProfesseurs.length === 0) {
       return null;
     }
-    //
+
     return (
       <View style={styles.itemContainer}>
         <Card style={{ padding: 15, marginTop: 10 }}>
@@ -48,8 +53,7 @@ const Combinaison = () => {
           </Text>
           {correspondingProfesseurs.map((professor) => (
             <Text style={styles.correspondingProfessorName} key={professor._id}>
-              {professor.nom} ( {professor.villeDesiree.replace(/;/g, " | ")}
-              )(
+              {professor.nom} ({professor.villeDesiree.replace(/;/g, " | ")})(
               {item.grade}) {"\n"}
             </Text>
           ))}
@@ -60,16 +64,18 @@ const Combinaison = () => {
 
   return (
     <View style={styles.container}>
-      <Picker
+      <ModalSelector
         style={styles.Pickerstyle}
-        selectedValue={Spécialités}
-        onValueChange={(itemValue) => setSpécialités(itemValue)}
-      >
-        <Picker.Item label="None" value="" />
-        {specialities.map((Spécialités, index) => (
-          <Picker.Item label={Spécialités} value={Spécialités} key={index} />
-        ))}
-      </Picker>
+        data={specialities.map((speciality) => ({
+          key: speciality,
+          label: speciality,
+        }))}
+        initValue={selectedSpeciality} // Set the initial value from the state variable
+        onChange={(option) => {
+          setSelectedSpeciality(option.key); // Update the selected specialty value
+          setSpécialités(option.key);
+        }}
+      />
 
       {filteredProfesseurs.length > 0 && (
         <FlatList
@@ -81,7 +87,6 @@ const Combinaison = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -95,10 +100,11 @@ const styles = StyleSheet.create({
   },
   Pickerstyle: {
     height: 40,
-    backgroundColor: "lightblue",
+    backgroundColor: "#446688",
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: "#446688",
     borderRadius: 20,
+    justifyContent: "center",
   },
   chart: {
     marginTop: 20,
@@ -123,7 +129,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     paddingVertical: 5,
   },
   column: {
