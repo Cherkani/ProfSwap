@@ -43,7 +43,7 @@ export default function Profil({ navigation }) {
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `https://troubled-red-garb.cyclic.app/professeurs/${email}`
+        `https://tiny-worm-nightgown.cyclic.app/professeurs/${email}`
       );
       console.log("Professor deleted");
       navigation.navigate("DrawerSkip");
@@ -55,7 +55,7 @@ export default function Profil({ navigation }) {
     if (true) {
       try {
         const response = await axios.post(
-          "https://troubled-red-garb.cyclic.app/professeurs",
+          "https://tiny-worm-nightgown.cyclic.app/professeurs",
           {
             nom: nom,
             prenom: prenom,

@@ -27,7 +27,7 @@ const Recherche = () => {
   const [selectedProfesseur, setSelectedProfesseur] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const links = "https://troubled-red-garb.cyclic.app/professeurs";
+  const links = "https://tiny-worm-nightgown.cyclic.app/professeurs";
 
   useEffect(() => {
     axios

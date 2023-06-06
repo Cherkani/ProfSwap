@@ -12,7 +12,7 @@ const Combinaison = () => {
   const [selectedSpeciality, setSelectedSpeciality] = useState(
     "Select a speciality"
   );
-  const Link = "https://troubled-red-garb.cyclic.app/professeurs";
+  const Link = "https://tiny-worm-nightgown.cyclic.app/professeurs";
 
   useEffect(() => {
     axios

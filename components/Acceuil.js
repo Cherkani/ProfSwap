@@ -4,22 +4,23 @@ import { PieChart } from "react-native-chart-kit";
 import axios from "axios";
 
 const Acceuil = () => {
-  const [professorTableData, setProfessorTableData] = useState([]);
   const [specialtyData, setSpecialtyData] = useState([]);
-  const [cityData, setCityData] = useState([]);
-  const [gradeData, setGradeData] = useState([]);
   const [specialtyTableData, setSpecialtyTableData] = useState([]);
+
+  const [cityData, setCityData] = useState([]);
   const [cityTableData, setCityTableData] = useState([]);
+
+  const [gradeData, setGradeData] = useState([]);
+  const [gradeTableData, setgradeTableData] = useState([]);
 
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://troubled-red-garb.cyclic.app/professeurs"
+        "https://tiny-worm-nightgown.cyclic.app/professeurs"
       );
-      // ///////////////////////
       const professors = response.data;
-
       // Count the number of professors per specialty
+      //////objet principale--------
       const specialtyCount = {};
       professors.forEach((professor) => {
         const specialties = professor.specialite.split(";");
@@ -32,7 +33,7 @@ const Acceuil = () => {
         });
       });
 
-      // Convert the specialty count object to an array of data objects
+      // obj principale to array of key
       const specialtyChartData = Object.keys(specialtyCount).map(
         (specialty) => ({
           name: specialty,
@@ -47,7 +48,7 @@ const Acceuil = () => {
 
       setSpecialtyData(limitedspecialityData);
 
-      // Convert the specialty count object to an array of table data objects///////
+      // obj principale to array of key
       const specialtyTableChartData = Object.keys(specialtyCount).map(
         (specialty) => ({
           specialty: specialty,
@@ -123,7 +124,7 @@ const Acceuil = () => {
         count: gradeCount[grade],
       }));
 
-      setProfessorTableData(ProfessorTableChartData);
+      setgradeTableData(ProfessorTableChartData);
     } catch (error) {
       console.error(error);
     }
@@ -276,7 +277,7 @@ const Acceuil = () => {
             <Text style={styles.tableHeader}>Grade</Text>
             <Text style={styles.tableHeader}>Nombre</Text>
           </View>
-          {professorTableData
+          {gradeTableData
             .sort((a, b) => b.count - a.count) // Tri par ordre décroissant
 
             .map((item, index) => (
