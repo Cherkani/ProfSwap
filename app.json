@@ -1,4 +1,5 @@
 {
+  
   "expo": {
     "name": "ProfSwap",
     "slug": "ProfSwap",
@@ -24,10 +25,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.aymen1008.ProfSwap"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "144229c7-8a3f-4923-a0e6-67a6dcfad407"
+      }
     }
   }
 }
