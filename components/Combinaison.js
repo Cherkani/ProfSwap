@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
+
+import { Card } from "react-native-shadow-cards";
 const Combinaison = () => {
   const [Professeurs, setProfesseurs] = useState([]);
   const [Spécialités, setSpécialités] = useState("");
@@ -40,17 +42,18 @@ const Combinaison = () => {
     //
     return (
       <View style={styles.itemContainer}>
-        <View style={styles.column}>
+        <Card style={{ padding: 15, marginTop: 10 }}>
           <Text style={styles.professorName}>
-            {item.nom} ({item.villeFaculteActuelle})({item.grade}) -&gt;
+            {item.nom} ({item.villeFaculteActuelle})({item.grade}) -&gt; {"\n"}
           </Text>
           {correspondingProfesseurs.map((professor) => (
             <Text style={styles.correspondingProfessorName} key={professor._id}>
-              {professor.nom} ( {professor.villeDesiree.replace(/;/g, " | ")})(
-              {item.grade})
+              {professor.nom} ( {professor.villeDesiree.replace(/;/g, " | ")}
+              )(
+              {item.grade}) {"\n"}
             </Text>
           ))}
-        </View>
+        </Card>
       </View>
     );
   };
@@ -58,7 +61,7 @@ const Combinaison = () => {
   return (
     <View style={styles.container}>
       <Picker
-        style={styles.dropdown}
+        style={styles.Pickerstyle}
         selectedValue={Spécialités}
         onValueChange={(itemValue) => setSpécialités(itemValue)}
       >
@@ -90,15 +93,12 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
   },
-  dropdown: {
+  Pickerstyle: {
     height: 40,
-    borderWidth: 1,
-    borderColor: "#446688",
-    marginBottom: 10,
     backgroundColor: "lightblue",
     borderWidth: 1,
     borderColor: "gray",
-    borderRadius: 3,
+    borderRadius: 20,
   },
   chart: {
     marginTop: 20,
@@ -124,18 +124,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderColor: "#ccc",
+    paddingVertical: 5,
   },
   column: {
     flex: 1,
   },
   professorName: {
     fontWeight: "bold",
+    fontSize: 18,
   },
   correspondingProfessorName: {
-    marginLeft: 10,
+    marginLeft: 18,
   },
 });
 

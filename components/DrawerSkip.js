@@ -42,7 +42,7 @@ export default function Drawer() {
   return (
     <DrawerNav.Navigator drawerContent={CustomDrawerContent}>
       <DrawerNav.Screen
-        name="Acceuil"
+        name="Home"
         component={Acceuil}
         initialParams={{ professor: professor }}
         options={{
@@ -54,7 +54,7 @@ export default function Drawer() {
       />
 
       <DrawerNav.Screen
-        name="inscription"
+        name="Register"
         component={Register}
         options={{
           drawerIcon: ({ color, size }) => (
@@ -65,7 +65,7 @@ export default function Drawer() {
       />
 
       <DrawerNav.Screen
-        name="A propos"
+        name="About"
         component={Apropos}
         options={{
           drawerIcon: ({ color, size }) => (

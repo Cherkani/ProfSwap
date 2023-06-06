@@ -11,7 +11,9 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
+// import { RoundedPicker } from "react-native-rounded-picker";
 
+import { Card } from "react-native-shadow-cards";
 const Recherche = () => {
   const [specialitésFilter, setspecialitésFilter] = useState("");
   const [villeActuelleFilter, setvilleActuelleFilter] = useState("");
@@ -136,23 +138,49 @@ const Recherche = () => {
           {getWantedCityOptions().map((city) => (
             <Picker.Item
               key={city}
-              label={city === "" ? "Toutes les villes" : city}
+              label={city === "" ? "All cities" : city}
               value={city}
             />
           ))}
         </Picker>
       </View>
+
       <FlatList
         data={filterprofesseurss()}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleprofesseursPress(item)}>
-            <View style={styles.fleche}>
+          <Card style={{ padding: 10, marginTop: 10, marginLeft: 15 }}>
+            {/* <View style={styles.fleche}> */}
+            <Text style={styles.textContainer}>
+              <Text style={styles.boldtext}>
+                {item.nom} {item.prenom}
+              </Text>
+              {"\n"}
+              {"\n"}
               <Text>
-                {item.nom} {item.prenom} -{item.villeFaculteActuelle}- ---&gt;
+                &lt;----{"\t"}
+                {"\t"}
+                {"\t"}
+                {item.villeFaculteActuelle}
+              </Text>
+              {"\n"}
+
+              {"\n"}
+              <Text>
+                ----&gt;{"\t"}
+                {"\t"}
+                {"\t"}
                 {item.villeDesiree.replace(/;/g, " | ")}
               </Text>
-            </View>
-          </TouchableOpacity>
+            </Text>
+
+            {/* </View> */}
+            <TouchableOpacity
+              style={styles.modalCloseButton}
+              onPress={() => handleprofesseursPress(item)}
+            >
+              <Text style={styles.textbold}>View Details</Text>
+            </TouchableOpacity>
+          </Card>
         )}
       />
 
@@ -238,7 +266,7 @@ const Recherche = () => {
               style={styles.modalCloseButton}
               onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.modalCloseButtonText}>Close</Text>
+              <Text style={styles.textbold}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -249,6 +277,10 @@ const Recherche = () => {
   );
 };
 const styles = StyleSheet.create({
+  boldtext: {
+    fontWeight: "bold",
+    fontSize: 18,
+  },
   dropdownText: {
     fontWeight: "bold",
     marginTop: 15,
@@ -256,8 +288,8 @@ const styles = StyleSheet.create({
   },
   dropdowncontainer: {
     marginLeft: 20,
-    flexDirection: "row", // Afficher les boutons côte à côte
-    justifyContent: "space-between", // Espace égal entre les boutons
+    flexDirection: "row",
+    justifyContent: "space-between",
     width: "80%",
     marginTop: 10,
   },
@@ -286,8 +318,8 @@ const styles = StyleSheet.create({
     backgroundColor: "lightblue",
     borderWidth: 1,
     borderColor: "gray",
-    borderRadius: 20,
-    overflow: "hidden", // Ajouter cette propriété pour les coins arrondis
+    borderRadius: 20, // Modifier cette valeur pour ajuster le rayon des coins
+    overflow: "hidden",
   },
 
   modalContainer: {
@@ -313,7 +345,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#446688",
     borderRadius: 25,
   },
-  modalCloseButtonText: {
+  textbold: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#fff",
